@@ -413,8 +413,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--preparation",
-        type=bool,
-        default=True,
+        action="store_true",
     )
     parser.add_argument(
         "--skip_save_images",
