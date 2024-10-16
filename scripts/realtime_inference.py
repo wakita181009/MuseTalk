@@ -281,7 +281,7 @@ class Avatar:
             os.system(cmd_combine_audio)
 
             os.remove(f"{self.avatar_path}/temp.mp4")
-            shutil.rmtree(f"{self.avatar_path}/tmp")
+            # shutil.rmtree(f"{self.avatar_path}/tmp")
             print(f"result is save to {output_vid}")
         print("\n")
        
