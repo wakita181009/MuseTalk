@@ -413,7 +413,6 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--preparation",
-        action="preparation",
         type=bool,
         default=True,
     )
