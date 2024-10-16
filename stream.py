@@ -25,3 +25,19 @@ async def video_feed():
         avatar.generate_frames(audio_path, fps, skip_save_images),
         media_type="multipart/x-mixed-replace; boundary=frame"
     )
+
+
+import uvicorn
+from pyngrok import ngrok
+from threading import Thread
+
+
+def run():
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+
+thread = Thread(target=run)
+thread.start()
+
+public_url = ngrok.connect(port="8000")
+print("FastAPI public URL:", public_url)
