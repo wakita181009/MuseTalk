@@ -8,6 +8,7 @@ import glob
 import pickle
 import sys
 from tqdm import tqdm
+from typing import Iterator
 import copy
 import json
 from musetalk.utils.utils import get_file_type, get_video_fps, datagen
@@ -317,7 +318,7 @@ class Avatar:
         start_time = time.time()
 
         for i, (whisper_batch, latent_batch) in enumerate(
-            tqdm(gen, total=int(np.ceil(float(video_num) / self.batch_size)))
+                tqdm(gen, total=int(np.ceil(float(video_num) / self.batch_size)))
         ):
             audio_feature_batch = torch.from_numpy(whisper_batch)
             audio_feature_batch = audio_feature_batch.to(
@@ -363,6 +364,30 @@ class Avatar:
             # shutil.rmtree(f"{self.avatar_path}/tmp")
             print(f"result is save to {output_vid}")
         print("\n")
+
+    def generate_frames(self, audio_path: str, fps: int, skip_save_images: bool) -> Iterator[bytes]:
+        os.makedirs(self.avatar_path + "/tmp", exist_ok=True)
+        print("start inference")
+
+        start_time = time.time()
+        whisper_feature = audio_processor.audio2feat(audio_path)
+        whisper_chunks = audio_processor.feature2chunks(feature_array=whisper_feature, fps=fps)
+        print(f"processing audio:{audio_path} costs {(time.time() - start_time) * 1000}ms")
+
+        self.idx = 0
+        gen = datagen(whisper_chunks, self.input_latent_list_cycle, self.batch_size)
+
+        for i, (whisper_batch, latent_batch) in enumerate(gen):
+            audio_feature_batch = pe(torch.from_numpy(whisper_batch).to(device=unet.device, dtype=unet.model.dtype))
+            latent_batch = latent_batch.to(dtype=unet.model.dtype)
+
+            pred_latents = unet.model(latent_batch, timesteps, encoder_hidden_states=audio_feature_batch).sample
+            recon = vae.decode_latents(pred_latents)
+            for res_frame in recon:
+                ret, buffer = cv2.imencode('.png', res_frame)
+                if ret:
+                    yield (b'--frame\r\n'
+                           b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
 
 if __name__ == "__main__":
