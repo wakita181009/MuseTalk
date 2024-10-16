@@ -285,9 +285,9 @@ class Avatar:
                     f"{self.avatar_path}/tmp/{str(self.idx).zfill(8)}.png",
                     combine_frame,
                 )
-                print(
-                    f"processing png: costs {(time.time() - start) * 1000}ms"
-                )
+                # print(
+                #     f"processing png: costs {(time.time() - start) * 1000}ms"
+                # )
             self.idx = self.idx + 1
 
     def inference(self, audio_path, out_vid_name, fps, skip_save_images):
@@ -315,7 +315,6 @@ class Avatar:
 
         gen = datagen(whisper_chunks, self.input_latent_list_cycle, self.batch_size)
         start_time = time.time()
-        res_frame_list = []
 
         for i, (whisper_batch, latent_batch) in enumerate(
             tqdm(gen, total=int(np.ceil(float(video_num) / self.batch_size)))
