@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "musetalk"
+version = "0.0.1"
+description = ""
+authors = ["tetsuyawakita <wakita181009@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+torch = "==2.0.1"
+torchvision = "==0.15.2"
+torchaudio = "==2.0.2"
+diffusers = "==0.27.2"
+accelerate = "==0.28.0"
+tensorflow = "==2.14.0"
+tensorboard = "==2.14.0"
+numpy = "==1.26.0"
+opencv-python = "==4.9.0.80"
+soundfile = "==0.12.1"
+transformers = "==4.39.2"
+gdown = "*"
+requests = "*"
+imageio = { extras = ["ffmpeg"], version = "*" }
+omegaconf = "*"
+ffmpeg-python = "*"
+gradio = "*"
+spaces = "*"
+moviepy = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
