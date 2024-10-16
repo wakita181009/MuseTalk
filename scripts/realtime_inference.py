@@ -285,6 +285,9 @@ class Avatar:
                     f"{self.avatar_path}/tmp/{str(self.idx).zfill(8)}.png",
                     combine_frame,
                 )
+                print(
+                    f"processing png: costs {(time.time() - start) * 1000}ms"
+                )
             self.idx = self.idx + 1
 
     def inference(self, audio_path, out_vid_name, fps, skip_save_images):
