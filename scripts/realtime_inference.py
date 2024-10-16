@@ -412,6 +412,12 @@ if __name__ == "__main__":
         default=4,
     )
     parser.add_argument(
+        "--preparation",
+        action="preparation",
+        type=bool,
+        default=True,
+    )
+    parser.add_argument(
         "--skip_save_images",
         action="store_true",
         help="Whether skip saving images for better generation speed calculation",
@@ -423,7 +429,6 @@ if __name__ == "__main__":
     print(inference_config)
 
     for avatar_id in inference_config:
-        data_preparation = inference_config[avatar_id]["preparation"]
         video_path = inference_config[avatar_id]["video_path"]
         bbox_shift = inference_config[avatar_id]["bbox_shift"]
         avatar = Avatar(
@@ -431,7 +436,7 @@ if __name__ == "__main__":
             video_path=video_path,
             bbox_shift=bbox_shift,
             batch_size=args.batch_size,
-            preparation=data_preparation,
+            preparation=args.preparation,
         )
 
         audio_clips = inference_config[avatar_id]["audio_clips"]
