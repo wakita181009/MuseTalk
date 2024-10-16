@@ -8,6 +8,6 @@ avator_1:
 avator_2:
   preparation: true
   bbox_shift: 5
-  video_path: "asset/demo/musk"
+  video_path: "assets/demo/musk"
   audio_clips:
     audio_1: "data/audio/yongen.wav"
