@@ -317,14 +317,8 @@ class Avatar:
         gen = datagen(whisper_chunks, self.input_latent_list_cycle, self.batch_size)
         start_time = time.time()
 
-        for i, (whisper_batch, latent_batch) in enumerate(
-                tqdm(gen, total=int(np.ceil(float(video_num) / self.batch_size)))
-        ):
-            audio_feature_batch = torch.from_numpy(whisper_batch)
-            audio_feature_batch = audio_feature_batch.to(
-                device=unet.device, dtype=unet.model.dtype
-            )
-            audio_feature_batch = pe(audio_feature_batch)
+        for whisper_batch, latent_batch in tqdm(gen, total=int(np.ceil(float(video_num) / self.batch_size))):
+            audio_feature_batch = pe(torch.from_numpy(whisper_batch).to(device=unet.device, dtype=unet.model.dtype))
             latent_batch = latent_batch.to(dtype=unet.model.dtype)
 
             pred_latents = unet.model(
