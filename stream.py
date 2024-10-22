@@ -9,7 +9,7 @@ if __name__ == "__main__":
     fps = 30
     skip_save_images = False
     avatar = Avatar(
-        avatar_id="avatar_stream",
+        avatar_id="avatar_1",
         video_path=video_path,
         bbox_shift=bbox_shift,
         batch_size=batch_size,
