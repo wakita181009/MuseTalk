@@ -7,6 +7,7 @@ import torch
 import glob
 import pickle
 import sys
+import subprocess
 from tqdm import tqdm
 from typing import Iterator
 import copy
@@ -371,6 +372,13 @@ class Avatar:
         self.idx = 0
         gen = datagen(whisper_chunks, self.input_latent_list_cycle, self.batch_size)
 
+        ffmpeg_command = [
+            'ffmpeg', '-f', 'image2pipe', '-vcodec', 'png', '-r', str(fps), '-i', '-',
+            '-vcodec', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p',
+            '-f', 'flv', 'rtmp://34.44.222.62/live/stream'
+        ]
+        process = subprocess.Popen(ffmpeg_command, stdin=subprocess.PIPE)
+
         for i, (whisper_batch, latent_batch) in enumerate(gen):
             audio_feature_batch = pe(torch.from_numpy(whisper_batch).to(device=unet.device, dtype=unet.model.dtype))
             latent_batch = latent_batch.to(dtype=unet.model.dtype)
@@ -380,8 +388,7 @@ class Avatar:
             for res_frame in recon:
                 ret, buffer = cv2.imencode('.png', res_frame)
                 if ret:
-                    yield (b'--frame\r\n'
-                           b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+                    process.stdin.write(buffer.tobytes())
 
 
 if __name__ == "__main__":

@@ -1,12 +1,6 @@
-from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
 from scripts.realtime_inference import Avatar
 
-app = FastAPI()
-
-
-@app.get("/video_feed")
-async def video_feed():
+if __name__ == "__main__":
     preparation = False
     batch_size = 4
     bbox_shift = 5
@@ -21,7 +15,4 @@ async def video_feed():
         batch_size=batch_size,
         preparation=preparation,
     )
-    return StreamingResponse(
-        avatar.generate_frames(audio_path, fps, skip_save_images),
-        media_type="multipart/x-mixed-replace; boundary=frame"
-    )
+    avatar.generate_frames(audio_path, fps, skip_save_images)
