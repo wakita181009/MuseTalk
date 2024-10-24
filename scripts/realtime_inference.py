@@ -374,8 +374,7 @@ class Avatar:
 
         ffmpeg_command = [
             'ffmpeg', '-f', 'image2pipe', '-vcodec', 'png', '-r', str(fps), '-i', '-',
-            '-vcodec', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p',
-            '-f', 'flv', 'rtmp://34.44.222.62/live/stream'
+            '-vcodec', 'libx264', '-preset', 'veryfast', '-f', 'flv', 'rtmp://34.44.222.62/live/stream'
         ]
         process = subprocess.Popen(ffmpeg_command, stdin=subprocess.PIPE)
 
